@@ -28,7 +28,12 @@ for (n in 1:NumOfDataPairs){
 
 	# Learn the optimal paramerers using MSE loss
     
-    Paras_hat <- solve( t(Train_X) %*% Train_X , t(Train_X) %*% Train_y)
+    # contstruct an identity matrix with small perturbations
+    #epsilon <- 1
+    #ident <- diag(dim(t(Train_X) %*% Train_X)[1])*epsilon
+
+    #Paras_hat <- solve( ident+(t(Train_X) %*% Train_X) , t(Train_X) %*% Train_y)
+    Paras_hat <- solve((t(Train_X) %*% Train_X) , t(Train_X) %*% Train_y)
     Pred_y    <- Test_X %*% Paras_hat;
     
     # Calculate the MSE of prediction using training data
