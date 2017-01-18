@@ -19,6 +19,11 @@ for(i in c(1:poly.max)){
     print(c(i,CompLab1.MSE(dat[,1],dat[,2],i)))
 }
 
+# plot polynomial against MSE
+pdf(paste0(path,'output/gendata_mse.pdf'))
+plot(results.mse$order,log(results.mse$MSE),col='red')
+dev.off()
+
 # part B
 source(paste0(path,'prog/fns/CompLab1_train_half.R'))
 
@@ -29,8 +34,10 @@ for(i in c(1:poly.max)){
 }
 
 # plot polynomial against MSE for in and out of training set
-plot(results.train_half$order,results.train_half$MSE.out,col='red')
-points(results.train_half$order,results.train_half$MSE.in,col='green')
+pdf(paste0(path,'output/gendata_train_half.pdf'))
+plot(results.train_half$order,log(results.train_half$MSE.in),col='green')
+points(results.train_half$order,log(results.train_half$MSE.out),col='red')
+dev.off()
 
 # Q2
 source(paste0(path,'prog/fns/CompLab1_LOOCV.R'))
@@ -41,7 +48,9 @@ for(i in c(1:poly.max)){
 }
 
 # plot polynomial against MSE
+pdf(paste0(path,'output/gendata_LOOCV.pdf'))
 plot(results.LOOCV$order,results.LOOCV$Mean_CV,col='red')
+dev.off()
 
 # Q3
 
