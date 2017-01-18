@@ -34,7 +34,7 @@ CompLab1.MSE <- function(x, y, PolyOrder) {
     # Result is MSE
     Results <- mean(CV)
     
-    plot(Test_y); lines(Pred_y,col='red')
+    plot(x,Test_y); points(x,Pred_y,col='red')
     
     return(Results)
 }

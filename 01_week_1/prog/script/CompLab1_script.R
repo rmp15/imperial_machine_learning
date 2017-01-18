@@ -22,19 +22,26 @@ for(i in c(1:poly.max)){
 # part B
 source(paste0(path,'prog/fns/CompLab1_train_half.R'))
 
-results.train_half <- data.frame(order=numeric(0),MSE=numeric(0))
+results.train_half <- data.frame(order=numeric(0),MSE.in=numeric(0),MSE.out=numeric(0))
 for(i in c(1:poly.max)){
     results.train_half[i,] <- c(i,CompLab1.train_half(dat[,1],dat[,2],i))
     print(c(i,CompLab1.train_half(dat[,1],dat[,2],i)))
 }
 
+# plot polynomial against MSE for in and out of training set
+plot(results.train_half$order,results.train_half$MSE.out,col='red')
+points(results.train_half$order,results.train_half$MSE.in,col='green')
+
 # Q2
 source(paste0(path,'prog/fns/CompLab1_LOOCV.R'))
 
-results.LOOCV <- data.frame(order=numeric(0),MSE=numeric(0))
+results.LOOCV <- data.frame(order=numeric(0),Mean_CV=numeric(0),SD_CV=numeric(0))
 for(i in c(1:poly.max)){
     results.LOOCV[i,] <- c(i,CompLab1.LOOCV(dat[,1],dat[,2],i))
 }
+
+# plot polynomial against MSE
+plot(results.LOOCV$order,results.LOOCV$Mean_CV,col='red')
 
 # Q3
 
@@ -56,7 +63,7 @@ for(i in c(1:poly.max)){
 }
 
 # LOOCV
-results.lj.LOOCV <- data.frame(order=numeric(0),MSE=numeric(0))
+results.lj.LOOCV <- data.frame(order=numeric(0),Mean_CV=numeric(0),SD_CV=numeric(0))
 for(i in c(1:poly.max)){
     results.lj.LOOCV[i,] <- c(i,CompLab1.LOOCV(dat.lj[,1],dat.lj[,2],i))
 }
