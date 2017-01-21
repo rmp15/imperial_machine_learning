@@ -58,9 +58,11 @@ dev.off()
 dat.lj <- read.table(paste0(path,'data/long_jump_data.txt'))
 
 # MSE
+source(paste0(path,'prog/fns/CompLab1_MSE_regularised.R'))
+
 results.lj.mse <- data.frame(order=numeric(0),MSE=numeric(0))
 for(i in c(1:poly.max)){
-    results.lj.mse[i,] <- c(i,CompLab1.MSE(dat.lj[,1],dat.lj[,2],i))
+    results.lj.mse[i,] <- c(i,CompLab1.MSE.ridge(dat.lj[,1],dat.lj[,2],i))
     print(c(i,CompLab1.MSE(dat.lj[,1],dat.lj[,2],i)))
 }
 
