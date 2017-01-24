@@ -38,7 +38,7 @@ CompLab1.MSE.ridge <- function(x, y, PolyOrder) {
     # Result is MSE
     Results <- mean(CV)
     
-    plot(x,Test_y); points(x,Pred_y,col='red')
+    plot(x,Test_y); lines(x,Pred_y,col='red')
     
     return(Results)
 }
