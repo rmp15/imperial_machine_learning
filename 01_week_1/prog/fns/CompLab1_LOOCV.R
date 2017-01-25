@@ -18,7 +18,7 @@ CV = matrix(nrow=NumOfDataPairs, ncol=1)
 
 for (n in 1:NumOfDataPairs){
 	
-	 # Create training design matrix and target data, leaving one out each time
+    # Create training design matrix and target data, leaving one out each time
 	Train_X <- X[-n, ]
    	Train_y <- y[-n]
    
