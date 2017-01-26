@@ -1,18 +1,24 @@
 CompLab2.Classification_LOOCV <- function(x, y, PolyOrder) {
 
 # x and y are column vectors containing the training inputs and targets respectively
-# xt and yt are column vectors containing the testing inputs and targets respectively
+# one of the training set is always left out while cross-validation takes place
 # PolyOrder is the order of polynomial model used for fitting
 
 NumOfDataPairs <- length(x)
 
-for (m in 1:NumOfDataPairs){
+#logJointProb_Total = matrix(0,nrow=30, ncol=1)
+
+#for (q in 1:30){
+
+# choose half of the dataset randomly
+set.seed(1)
+m = sample(1:NumOfDataPairs, round(NumOfDataPairs/2))
 
     # First construct design matrix of given order
-    X       <- rep(1, NumOfDataPairs-1)
-    dim(X)  <- c(NumOfDataPairs-1, 1)
-    Xt      <- rep(1, 1)
-    dim(Xt) <- c(1, 1)
+    X       <- rep(1, NumOfDataPairs/2)
+    dim(X)  <- c(NumOfDataPairs/2, 1)
+    Xt      <- rep(1, NumOfDataPairs/2)
+    dim(Xt) <- c(NumOfDataPairs/2, 1)
 
     for (n in 1:PolyOrder){
         X  = cbind(X, x[-m]^n)
@@ -34,7 +40,7 @@ for (m in 1:NumOfDataPairs){
         P     = 1./(1 + exp(-X %*% Theta))
         A     = diag(P[,1]*(1-P[,1]))
         H     = t(X) %*% A %*% X + diag(NumOfParas)/alpha
-        Theta = solve(H, t(X)%*%(A%*%X%*%Theta + y[-m] - P) ) # this line updates theta using newton's method (pg 30)
+        Theta = solve(H, t(X)%*%(A%*%X%*%Theta + y[-m] - P) ) # this line updates theta using newton's method (pg 30 in lecture notes)
         
         # Compute new likelihood and unnormalised posterior values for training data
         f             = X%*%Theta # train
@@ -54,7 +60,11 @@ for (m in 1:NumOfDataPairs){
     logJointProb_Test  = logLikelihood_Test + logPrior_Test
 
     # Total log-likelihood
-    logJointProb_Total[m] = logJointProb + logJointProb_Test
+    #logJointProb_Total[m] = logJointProb + logJointProb_Test
+    #logJointProb_Total = logJointProb + logJointProb_Test
+    logJointProb_Total = logJointProb_Test
+    #logJointProb_Total = logJointProb_Test
+
 
 # Calculate percentage of training errors
 #Train_Error = 100 - 100*sum( (1/(1+exp(-X%*%Theta)) > 0.5) == y)/NumOfDataPairs_Train
@@ -67,7 +77,9 @@ for (m in 1:NumOfDataPairs){
 #cat("Percentage training error: ", Train_Error, "\n")
 #cat("Percentage testing error: ", Test_Error, "\n")
 
-}
+#}
+
+#}
 
 logJointProb_Mean = mean(logJointProb_Total)
 logJointProb_sd = sd(logJointProb_Total)
