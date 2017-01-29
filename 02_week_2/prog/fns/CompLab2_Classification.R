@@ -4,8 +4,8 @@ CompLab2.Classification <- function(x, y, xt, yt, PolyOrder) {
 # xt and yt are column vectors containing the testing inputs and targets respectively
 # PolyOrder is the order of polynomial model used for fitting
  
-NumOfDataPairs_Train <- length(x)
-NumOfDataPairs_Test  <- length(xt)
+NumOfDataPairs_Train <- nrow(x)
+NumOfDataPairs_Test  <- nrow(xt)
 
 # First construct design matrix of given order
 X       <- rep(1, NumOfDataPairs_Train)
@@ -33,9 +33,9 @@ for (n in 1:N_Steps){
     P     = 1./(1 + exp(-X %*% Theta))
     A     = diag(P[,1]*(1-P[,1]))
     H     = t(X) %*% A %*% X + diag(NumOfParas)/alpha
-    Theta = solve(H, t(X)%*%(A%*%X%*%Theta + y - P) ) # this line updates theta using newton's method (pg 30)
+    Theta = solve(H, t(X)%*%(A%*%X%*%Theta + y - P) )
         
-    # Compute new likelihood and unnormalised posterior values for training data
+    # Compute new likelihood and unormalised posterior values for training data
     f             = X%*%Theta # train
     logPrior      = sum( dnorm(Theta, rep(0, NumOfParas), rep(alpha, NumOfParas), log=TRUE) )
     logLikelihood = t(f)%*%y - sum(log(1+exp(f))) # training likelihood
@@ -54,16 +54,15 @@ logLikelihood_Test = t(ft)%*%yt - sum(log(1+exp(ft))) # testing likelihood
 logJointProb_Test  = logLikelihood_Test + logPrior_Test
 
 # Calculate percentage of training errors
-#Train_Error = 100 - 100*sum( (1/(1+exp(-X%*%Theta)) > 0.5) == y)/NumOfDataPairs_Train
-Train_Error = 100 - 100*sum( (1/(1+exp(-X%*%Theta)) > 0.5))/NumOfDataPairs_Train
+Train_Error = 100 - 100*sum( (1/(1+exp(-X%*%Theta)) > 0.5) == y)/NumOfDataPairs_Train
 
 # Calculate percentage of training errors
-#Test_Error = 100 - 100*sum( (1/(1+exp(-Xt%*%Theta)) > 0.5) == yt)/NumOfDataPairs_Test
-Test_Error = 100 - 100*sum( (1/(1+exp(-Xt%*%Theta)) > 0.5))/NumOfDataPairs_Test
+Test_Error = 100 - 100*sum( (1/(1+exp(-Xt%*%Theta)) > 0.5) == yt)/NumOfDataPairs_Test
 
 cat("Percentage training error: ", Train_Error, "\n")
 cat("Percentage testing error: ", Test_Error, "\n")
 
 return(c(Train_Error,Test_Error,logJointProb,logJointProb_Test))
+
 
 }
