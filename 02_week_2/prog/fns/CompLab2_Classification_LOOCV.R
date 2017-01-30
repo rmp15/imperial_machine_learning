@@ -11,11 +11,13 @@ logJointProb_Test <- matrix(NA, nrow=NumOfDataPairs_Train,ncol=1)
 logJointProb_Total <- matrix(NA, nrow=NumOfDataPairs_Train,ncol=1)
 
 
-for (m in 1:NumOfDataPairs_Train){
+#for (m in 1:NumOfDataPairs_Train){
+    for (m in 1:NumOfDataPairs_Train){
+
 
     # First construct design matrix of given order
     X       <- rep(1, NumOfDataPairs_Train-1)
-    dim(X)  <- c(NumOfDataPairs_Train-1, 1)
+    X       <- rep(1, NumOfDataPairs_Train-1)
     Xt      <- rep(1, 1)
     dim(Xt) <- c(1, 1)
 
@@ -45,7 +47,7 @@ for (m in 1:NumOfDataPairs_Train){
         f             = X%*%Theta # train
         logPrior      = sum( dnorm(Theta, rep(0, NumOfParas), rep(alpha, NumOfParas), log=TRUE) )
         logLikelihood = t(f)%*%y[-m] - sum(log(1+exp(f))) # training likelihood
-        logJointProb[m]  = logLikelihood + logPrior
+        logJointProb[m]  = logLikelihood #+ logPrior
         
         #cat("Iteration ", n, ": Log joint probability is ", logJointProb[m], "\n")
 
@@ -58,7 +60,7 @@ for (m in 1:NumOfDataPairs_Train){
     ft                 = Xt%*%Theta # test
     logPrior_Test      = sum( dnorm(Theta, rep(0, NumOfParas), rep(alpha, NumOfParas), log=TRUE) )
     logLikelihood_Test = t(ft)%*%y[m] - sum(log(1+exp(ft))) # testing likelihood
-    logJointProb_Test[m]  = logLikelihood_Test + logPrior_Test
+    logJointProb_Test[m]  = logLikelihood_Test# + logPrior_Test
     
     # Total likelihood of both training and test
     logJointProb_Total[m] <- logJointProb[m] + logJointProb_Test[m]

@@ -1,4 +1,4 @@
-rm(list=ls())
+trm(list=ls())
 
 # load dataset
 path <- '~/git/tutorials/imperial_machine_learning/02_week_2/'
@@ -38,12 +38,13 @@ source(paste0(path,'prog/fns/CompLab2_Classification_LOOCV.R'))
 
 results.loocv <- data.frame(order=numeric(0),mean.ll=numeric(0),sd.ll=numeric(0),meantr.ll=numeric(0),sdtr.ll=numeric(0),meantot.ll=numeric(0),sdtot.ll=numeric(0))
 for(i in c(1:poly.max)){
-    results.loocv[i,] <- c(i,CompLab2.Classification_LOOCV(dat.train[,c(1:2)],dat.train[,3],i))
+    results.loocv[i,] <- c(i,CompLab2.Classification_LOOCV(dat.test[,c(1:2)],dat.test[,3],i))
 }
 
 # save output (because it takes quite a long time to run)
 saveRDS(results.loocv,paste0(path,'output/order_against_loocvll'))
 
 pdf(paste0(path,'output/order_against_loocvll.pdf'))
-plot(results.loocv$order,results.loocv$mean.ll,t='l')
+plot(results.loocv$order,results.loocv$meantr.ll,t='l')
 dev.off()
+ 
